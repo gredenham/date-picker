@@ -1,6 +1,9 @@
-# DataPickerApp
+
+# Angular2+ DataPickerApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
+
+## Example https://dist-wctrgkejls.now.sh/
 
 ## Development server
 
