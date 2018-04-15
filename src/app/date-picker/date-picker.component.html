@@ -1,0 +1,38 @@
+<div (click)="isOpen = !isOpen" class="calendar__btn">
+  <div class="calendar__btn-val">{{btnDisplayDate().full | date: 'dd/MM/yyyy' }}</div>
+</div>
+
+<div *ngIf="isOpen" class="container">
+
+  <app-date-picker-selector
+    [selectedMonth]="selectedMonth"
+    [selectedYear]="selectedYear"
+    (changeMonth)="selectedMonth = $event"
+    (changeYear)="selectedYear = $event">
+  </app-date-picker-selector>
+
+  <div class="week">
+    <div class="day week-day" *ngFor="let day of datePickerService.dayOfWeek()">{{day}}</div>
+  </div>
+
+  <app-date-picker-calendar
+    [selectedDate]="selectedDate"
+    [selectedMonth]="selectedMonth"
+    [selectedYear]="selectedYear"
+    (checkSelect)="selectedDate = $event">
+  </app-date-picker-calendar>
+
+  <div class="bottom-btns">
+    <div class="btn-cancel"
+         [ngClass]="{'disabled-confirm': !selectedDate}"
+         (click)="cancelDate()">
+      Сброс
+    </div>
+    <div class="btn-ok"
+         [ngClass]="{'disabled-confirm': !selectedDate}"
+         (click)="confirmDate()">
+      ОК
+    </div>
+  </div>
+
+</div>

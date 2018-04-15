@@ -1,0 +1,51 @@
+:host {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    user-select: none;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+.day {
+    width: calc(100% / 7);
+    height: 32px;
+    display: inline-block;
+    vertical-align: bottom;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font: 14px 'Roboto-Regular', sans-serif;
+    color: #323232;
+    box-sizing: border-box;
+    border-radius: 2px;
+}
+
+.calendar-day {
+    cursor: pointer;
+}
+
+.disabled-day {
+    background: rgba(50, 50, 50, .05);
+    border-radius: 0;
+}
+
+.clicked-day {
+    background: #F16222 !important;
+    color: white;
+}
+
+.coincide-day {
+    background: rgba(50,50,50,.2);
+    color: white;
+}
+
+.today-day {
+    background: lightsalmon;
+    color: white;
+}
+
+.calendar-day:hover:not(.disabled-day) {
+    background: rgba(241,98,34,.2);
+}
