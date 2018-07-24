@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DatePickerReviewService } from './date-picker.review.service';
 
 export interface ICalendarDay {
     day: number;
@@ -13,26 +14,21 @@ export class DatePickerService {
 
     public now: Date = new Date();
 
-    constructor() {
-    }
+    constructor(private datePickerReviewService: DatePickerReviewService) {}
 
-    public dayOfWeek() {
-        return (['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']);
-    }
+    public sortDates = (prev: ICalendarDay, cur: ICalendarDay) => {
+        return (this.datePickerReviewService.isFirstValueSmaller(prev, cur) ? -1 : 1)
+    };
 
     public getDaysArray(month, year): ICalendarDay[] {
-        const mon = month;
-        const d = new Date(year, mon);
-        const resultArray = [];
+        let mon = month;
+        let d = new Date(year, mon);
+        let resultArray = [];
 
-        // заполнить первый ряд от понедельника
-        // и до дня, с которого начинается месяц
-        // * * * | 1  2  3  4
         for (let i = 0; i < this.getDay(d); i++) {
             resultArray.push(null);
         }
 
-        // ячейки календаря с датами
         while (d.getMonth() === mon) {
             resultArray.push({
                 year: d.getFullYear(),
@@ -43,7 +39,6 @@ export class DatePickerService {
             d.setDate(d.getDate() + 1);
         }
 
-        // добить таблицу пустыми ячейками, если нужно
         if (this.getDay(d) !== 0) {
             for (let i = this.getDay(d); i < 7; i++) {
                 resultArray.push(null);
@@ -53,7 +48,7 @@ export class DatePickerService {
         return resultArray;
     }
 
-    public getDay(date) { // получить номер дня недели, от 0(пн) до 6(вс)
+    public getDay(date) {
         let day = date.getDay();
         if (day === 0) {
             day = 7;

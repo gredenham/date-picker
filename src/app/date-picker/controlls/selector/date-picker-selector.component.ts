@@ -1,83 +1,63 @@
-import {
-    Component,
-    EventEmitter,
-    Input,
-    Output
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { combineLatest } from 'rxjs/operators';
+import { DatePickerStore } from '../../services/date-picker.store';
 
 @Component({
     selector: 'app-date-picker-selector',
     styleUrls: ['./date-picker-selector.component.scss'],
     template: `
-        <div class="btn-left" (click)="decrementMonth()"></div>
+        <div class="btn-left" (click)="changeMonth(-1)"></div>
         <div class="title" (click)="isOpen = !isOpen">
             {{selectedMonth | myDatePickerPipe}},<span class="year">{{selectedYear}}</span>
         </div>
-        <div class="btn-right" (click)="incrementMonth()"></div>
-
+        <div class="btn-right" (click)="changeMonth(1)"></div>
 
         <div class="month_list" *ngIf="isOpen">
             <div class="year_switch">
-                <div (click)="decrementYear()" class="year_switch-btn-left">&#706;</div>
+                <div (click)="changeYear(-1)" class="year_switch-btn-left">&#706;</div>
                 <div class="year_switch-value">{{selectedYear}}</div>
-                <div (click)="incrementYear()" class="year_switch-btn-right">&#707;</div>
+                <div (click)="changeYear(1)" class="year_switch-btn-right">&#707;</div>
             </div>
-            <div (click)="isOpen = false; this.changeMonth.emit(month);" class="month_list-item" *ngFor="let month of monthArray">
+            <div (click)="isOpen = false; datePickerStore.changeMonth(month);"
+                class="month_list-item" *ngFor="let month of datePickerStore.getMonthes | async | ObjecToArrayByKeysPipe">
                 {{month | myDatePickerPipe}}
             </div>
         </div>
     `
 })
 
-export class DatePickerSelectorComponent {
+export class DatePickerSelectorComponent implements OnInit {
 
-    @Input() public selectedYear: number;
-    @Input() public selectedMonth: number;
-    @Output() public changeYear: EventEmitter<any> = new EventEmitter();
-    @Output() public changeMonth: EventEmitter<any> = new EventEmitter();
+    public selectedYear: number;
+
+    public selectedMonth: number;
 
     public isOpen = false;
 
-    public monthArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    constructor(private datePickerStore: DatePickerStore) {}
 
-    constructor() {
+    public ngOnInit() {
+
+        this.datePickerStore.getSelectedMonth
+            .pipe(
+                combineLatest(this.datePickerStore.getSelectedYear),
+            )
+            .subscribe(([month, year]) => {
+                this.selectedMonth = month;
+                this.selectedYear = year;
+            });
     }
 
-    public incrementYear() {
-        const year = this.selectedYear += 1;
-        this.changeYear.emit(year);
+    public changeYear(val: number) {
+        this.datePickerStore.changeYear(this.selectedYear + val);
     }
 
-    public decrementYear() {
-        const year = this.selectedYear -= 1;
-        this.changeYear.emit(year);
-    }
-
-    public incrementMonth() {
-        let month;
-        let year;
-        if (this.selectedMonth < 11) {
-            month = this.selectedMonth += 1;
-            year = this.selectedYear;
+    public changeMonth(val: number) {
+        if ((this.selectedMonth === 11 && val > 0) || (this.selectedMonth === 0 && val < 0)) {
+            this.datePickerStore.changeMonth(this.selectedMonth === 11 ? 0 : 11);
+            this.datePickerStore.changeYear(this.selectedYear + val);
         } else {
-            month = this.selectedMonth = 0;
-            year = this.selectedYear += 1;
+            this.datePickerStore.changeMonth(this.selectedMonth + val);
         }
-        this.changeMonth.emit(month);
-        this.changeYear.emit(year);
-    }
-
-    public decrementMonth() {
-        let month;
-        let year;
-        if (this.selectedMonth > 0) {
-            month = this.selectedMonth -= 1;
-            year = this.selectedYear;
-        } else {
-            month = this.selectedMonth = 11;
-            year = this.selectedYear -= 1;
-        }
-        this.changeMonth.emit(month);
-        this.changeYear.emit(year);
     }
 }

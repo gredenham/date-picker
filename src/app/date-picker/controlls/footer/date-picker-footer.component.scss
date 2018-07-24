@@ -1,0 +1,24 @@
+.bottom-btns {
+    box-sizing: border-box;
+    height: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-cancel, .btn-ok {
+    height: 100%;
+    font: 14px 'Roboto-Regular', sans-serif;
+    color: rgba(0, 0, 0, .7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.disabled-confirm {
+    cursor: not-allowed;
+    color: rgba(0, 0, 0, .2);
+}

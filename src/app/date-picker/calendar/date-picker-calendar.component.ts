@@ -1,16 +1,8 @@
-import {
-    DatePickerService,
-    ICalendarDay
-} from './../services/date-picker.service';
-import {
-    ChangeDetectorRef,
-    Component,
-    EventEmitter,
-    Input,
-    OnInit,
-    Output
-} from '@angular/core';
+import { DatePickerService, ICalendarDay } from '../services/date-picker.service';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePickerReviewService } from '../services/date-picker.review.service';
+import { DatePickerStore } from '../services/date-picker.store';
+import { combineLatest, map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-date-picker-calendar',
@@ -19,8 +11,9 @@ import { DatePickerReviewService } from '../services/date-picker.review.service'
         <div *ngFor="let item of datePickerService.getDaysArray(selectedMonth, selectedYear)"
             class="day calendar-day"
             [ngClass]="{
-                'clicked-day': reviewService.isSelected(item, selectedDate),
-                'today-day': reviewService.isToday(item, date),
+                'clicked-day': datePickerReviewService.isSelected(item, selectedDate),
+                'coincide-day': datePickerReviewService.isCoincide(item, selectedDate),
+                'today-day': datePickerReviewService.isToday(item, date),
                 'disabled-day': item === null
             }"
             (click)="selectDate(item)">
@@ -31,32 +24,61 @@ import { DatePickerReviewService } from '../services/date-picker.review.service'
 
 export class DatePickerCalendarComponent implements OnInit {
 
-    @Input() public selectedYear: number;
-    @Input() public selectedMonth: number;
-    @Input() public selectedDate: ICalendarDay;
-    @Output() public checkSelect: EventEmitter<any> = new EventEmitter();
+    public selectedYear: number;
+    public selectedMonth: number;
+    public selectedDate: ICalendarDay[] = [];
 
     public date: Date;
 
     constructor(
         public ref: ChangeDetectorRef,
         public datePickerService: DatePickerService,
-        public reviewService: DatePickerReviewService
-    ) {
-    }
+        public datePickerReviewService: DatePickerReviewService,
+        private datePickerStore: DatePickerStore,
+    ) {}
 
     ngOnInit() {
-        this.date = new Date();
-        this.selectedDate = this.selectedDate = {
-            day: this.date.getDate(),
-            month: this.date.getMonth(),
-            year: this.date.getFullYear(),
-            full: this.date
-        };
+        
+        this.datePickerStore.getSelectedMonth
+            .pipe(
+                combineLatest(this.datePickerStore.getSelectedYear),
+                combineLatest(this.datePickerStore.getCurrentDate),
+                map(([date, cur]) => date.concat(cur))
+            )
+            .subscribe(([month, year, cur]) => {
+                this.date = cur;
+                this.selectedMonth = month;
+                this.selectedYear = year;
+            });
+
+        this.datePickerStore.getSelectedDate.subscribe((date) => this.selectedDate = date);
+
     }
 
     public selectDate(date) {
-        this.checkSelect.emit(date);
-        this.ref.detectChanges();
+        let result = this.selectedDate;
+
+        function defineDate() {
+            const index = result.findIndex((item) =>
+                ( this.datePickerReviewService.isValuesEquals(date, item) )
+            );
+            if (index >= 0) {
+                result.splice(index, 1);
+            } else {
+                if (result.length < 2) {
+                    (result.length === 1 && this.datePickerReviewService.isFirstValueSmaller(date, result[0]))
+                        ? result.unshift(date)
+                        : result.push(date);
+                } else if (result.length === 2) {
+                    result = [];
+                    defineDate.call(this);
+                }
+            }
+        }
+
+        if (date) {
+            defineDate.call(this);
+            this.datePickerStore.changeSelectedDate(result);
+        }
     }
 }

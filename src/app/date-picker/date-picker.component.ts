@@ -1,17 +1,8 @@
-import {
-    DatePickerService,
-    ICalendarDay
-} from './services/date-picker.service';
-import {
-    Component,
-    forwardRef,
-    OnInit
-} from '@angular/core';
+import { DatePickerService } from './services/date-picker.service';
+import { Component, forwardRef, OnInit } from '@angular/core';
 import { DatePickerReviewService } from './services/date-picker.review.service';
-import {
-    ControlValueAccessor,
-    NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { DatePickerStore } from './services/date-picker.store';
 
 export interface IDateControl {
     min: Date;
@@ -20,7 +11,7 @@ export interface IDateControl {
 }
 
 @Component({
-    selector: 'app-ghm-date-picker',
+    selector: 'gredenham-date-picker',
     styleUrls: ['./date-picker.component.scss'],
     templateUrl: './date-picker.component.html',
     providers: [
@@ -34,70 +25,56 @@ export interface IDateControl {
 
 export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
-    public selectedYear: number;
-
-    public selectedMonth: number;
-
-    public selectedDate: ICalendarDay;
-
     public isOpen = false;
-
-    public date: Date;
 
     constructor(
         public datePickerService: DatePickerService,
-        public reviewService: DatePickerReviewService
-    ) {
+        public datePickerReviewService: DatePickerReviewService,
+        private datePickerStore: DatePickerStore
+    ) {}
+
+    public ngOnInit() {}
+
+    public writeValue(control: IDateControl) {
+        if (this.datePickerReviewService.checkControl(control)) {
+
+            this.datePickerStore.changeSelectedDate(
+                    Object.values(control).map((item) => ({
+                    day: item.getDate(),
+                    month: item.getMonth(),
+                    year: item.getFullYear(),
+                    full: item
+                }))
+            );
+
+        }
     }
 
-    public ngOnInit() {
-        this.date = new Date();
-        this.selectedYear = this.date.getFullYear();
-        this.selectedMonth = this.date.getMonth();
-    }
-
-    public writeValue(control: Date) {
-        control = !control
-            ? new Date()
-            : (typeof control === 'string' ? (new Date(control)) : control);
-        this.selectedDate = {
-            day: control.getDate(),
-            month: control.getMonth(),
-            year: control.getFullYear(),
-            full: control
-        };
-    }
-
-    public btnDisplayDate(): ICalendarDay {
-        return this.selectedDate
-            ? this.selectedDate
-            : {
-                day: this.date.getDate(),
-                month: this.date.getMonth(),
-                year: this.date.getFullYear(),
-                full: this.date
-            };
-    }
-
-    public propagateChange = (_: any) => {
-    }
+    public propagateChange = (_: any) => {};
 
     public registerOnChange(fn) {
         this.propagateChange = fn;
     }
 
-    public registerOnTouched() {
-    }
+    public registerOnTouched() {}
 
-    public confirmDate() {
-        if (this.selectedDate) {
+    public confirmChanges(selectedDate) {
+        if (selectedDate.length === 1) {
             this.isOpen = false;
-            this.propagateChange(this.selectedDate.full);
+            this.propagateChange({
+                min: selectedDate[0].full,
+                max: selectedDate[0].full,
+                isActive: true,
+            });
+        } else if (selectedDate.length === 2) {
+            this.isOpen = false;
+            let [min, max] = selectedDate.sort(this.datePickerService.sortDates);
+            this.propagateChange({
+                min: min.full,
+                max: max.full,
+                isActive: true
+            });
         }
-    }
-
-    public cancelDate() {
-        this.selectedDate = null;
     }
 
 }

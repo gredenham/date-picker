@@ -1,18 +1,7 @@
-@mixin font-smoothing {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    backface-visibility: hidden;
-}
-
 :host {
-    height: 34px;
-    display: flex;
-    align-items: center;
-    // width: 100px;
+    height: 100%;
+    width: 100%;
     box-sizing: border-box;
-    position: relative;
-    margin-right: 14px;
-    color: #323232;
 }
 
 .calendar__btn {
@@ -22,7 +11,6 @@
     box-sizing: border-box;
     border-radius: 4px;
     font: 14px 'Roboto-Regular', sans-serif;
-    @include font-smoothing();
     display: flex;
     align-items: center;
     box-shadow: 0 1px 6px rgba(0, 0, 0, .1);
@@ -50,65 +38,4 @@
 
 .calendar__btn-val {
     margin: 0 5px;
-}
-
-.container {
-    position: absolute;
-    top: calc(100% + 5px);
-    left: 0;
-    width: 290px;
-    border-radius: 5px;
-    user-select: none;
-    z-index: 1000;
-    background: #fff;
-    box-sizing: border-box;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, .1);
-}
-
-.week {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    box-sizing: border-box;
-    text-transform: uppercase;
-    padding: 10px 10px 0;
-}
-
-.day {
-    width: calc(100% / 7);
-    height: 22px;
-    display: inline-block;
-    vertical-align: bottom;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font: 11px 'Roboto-Bold', sans-serif;
-    color: #323232;
-    box-sizing: border-box;
-}
-
-.bottom-btns {
-    box-sizing: border-box;
-    height: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-}
-
-.btn-cancel, .btn-ok {
-    height: 100%;
-    font: 14px 'Roboto-Regular', sans-serif;
-    color: rgba(0, 0, 0, .7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-
-.disabled-confirm {
-    cursor: not-allowed;
-    color: rgba(0, 0, 0, .2);
 }

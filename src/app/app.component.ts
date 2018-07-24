@@ -15,6 +15,4 @@ export class AppComponent {
       min: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-1`),
       max: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-20`)
   };
-
-  public oneDay: Date = (new Date());
 }

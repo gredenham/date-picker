@@ -1,25 +1,37 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { DatePickerService } from './services/date-picker.service';
-import { DatePickerPipe } from './date-picker.pipe';
+import { DatePickerPipe } from './pipes/date-picker.pipe';
 import { DatePickerSelectorComponent } from './controlls/selector/date-picker-selector.component';
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { DatePickerCalendarComponent } from './calendar/date-picker-calendar.component';
 import { DatePickerComponent } from './date-picker.component';
+import { DatePickerStore } from './services/date-picker.store';
+import { ObjecToArrayByKeysPipe } from './pipes/object-to-array-by-keys.pipe';
+import { DatePickerFooterComponent } from './controlls/footer/date-picker-footer.component';
+import { DatePickerDisplayComponent } from './controlls/display/date-picker-display.component';
 
 const DatePickerComponents = [
     DatePickerComponent,
     DatePickerSelectorComponent,
     DatePickerCalendarComponent,
-    DatePickerPipe
+    DatePickerFooterComponent,
+    DatePickerDisplayComponent,
+    DatePickerPipe,
+    ObjecToArrayByKeysPipe
+];
+
+const DatePickerServices = [
+    DatePickerService,
+    DatePickerReviewService,
+    DatePickerStore
 ];
 
 @NgModule({
     exports: [...DatePickerComponents],
     declarations: [...DatePickerComponents],
-    providers: [DatePickerService, DatePickerReviewService],
+    providers: [...DatePickerServices],
     imports: [CommonModule],
 })
 
-export class DatePickerPeriodModule {
-}
+export class GredenhamDatePickerModule {}
