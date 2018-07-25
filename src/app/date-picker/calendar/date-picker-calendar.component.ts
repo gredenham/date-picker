@@ -2,7 +2,7 @@ import { DatePickerService, ICalendarDay } from '../services/date-picker.service
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePickerReviewService } from '../services/date-picker.review.service';
 import { DatePickerStore } from '../services/date-picker.store';
-import { combineLatest, map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 
 @Component({
     selector: 'app-date-picker-calendar',
@@ -39,19 +39,17 @@ export class DatePickerCalendarComponent implements OnInit {
 
     ngOnInit() {
         
-        this.datePickerStore.getSelectedMonth
-            .pipe(
-                combineLatest(this.datePickerStore.getSelectedYear),
-                combineLatest(this.datePickerStore.getCurrentDate),
-                map(([date, cur]) => date.concat(cur))
-            )
-            .subscribe(([month, year, cur]) => {
-                this.date = cur;
-                this.selectedMonth = month;
-                this.selectedYear = year;
-            });
-
-        this.datePickerStore.getSelectedDate.subscribe((date) => this.selectedDate = date);
+        combineLatest(
+            this.datePickerStore.getSelectedMonth,
+            this.datePickerStore.getSelectedYear, 
+            this.datePickerStore.getCurrentDate,
+            this.datePickerStore.getSelectedDate
+        ).subscribe(([month, year, cur, selectedDate]) => {
+            this.date = cur;
+            this.selectedMonth = month;
+            this.selectedYear = year;
+            this.selectedDate = selectedDate;
+        });
 
     }
 

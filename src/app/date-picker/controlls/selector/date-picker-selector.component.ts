@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { combineLatest } from 'rxjs/operators';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 import { DatePickerStore } from '../../services/date-picker.store';
 
 @Component({
@@ -38,14 +38,13 @@ export class DatePickerSelectorComponent implements OnInit {
 
     public ngOnInit() {
 
-        this.datePickerStore.getSelectedMonth
-            .pipe(
-                combineLatest(this.datePickerStore.getSelectedYear),
-            )
-            .subscribe(([month, year]) => {
-                this.selectedMonth = month;
-                this.selectedYear = year;
-            });
+        combineLatest(
+            this.datePickerStore.getSelectedMonth,
+            this.datePickerStore.getSelectedYear
+        ).subscribe(([month, year]) => {
+            this.selectedMonth = month;
+            this.selectedYear = year;
+        });
     }
 
     public changeYear(val: number) {
