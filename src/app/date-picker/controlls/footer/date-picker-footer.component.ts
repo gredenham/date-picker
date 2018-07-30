@@ -27,7 +27,7 @@ export class DatePickerFooterComponent implements OnInit {
 
     public selectedDate: ICalendarDay[];
 
-    constructor(private datePickerStore: DatePickerStore) {
+    constructor(public datePickerStore: DatePickerStore) {
         this.selectedDate = [];
     }
 

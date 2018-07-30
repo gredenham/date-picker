@@ -7,14 +7,14 @@ export class DatePickerReviewService {
 
     constructor() {}
 
-    private checkValidDate(date) {
-        let isDate = Object.prototype.toString.call(date) === "[object Date]";
-        let isDateValid = isDate && !isNaN(date.getTime());
+    public checkValidDate(date) {
+        const isDate = Object.prototype.toString.call(date) === '[object Date]';
+        const isDateValid = isDate && !isNaN(date.getTime());
         return isDateValid;
     }
 
     public checkControl(control) {
-        let isControlValid = control && control.hasOwnProperty('min')
+        const isControlValid = control && control.hasOwnProperty('min')
             && control.hasOwnProperty('max')
             && Object.values(control).every(this.checkValidDate);
         return isControlValid;

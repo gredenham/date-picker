@@ -17,13 +17,13 @@ export class DatePickerService {
     constructor(private datePickerReviewService: DatePickerReviewService) {}
 
     public sortDates = (prev: ICalendarDay, cur: ICalendarDay) => {
-        return (this.datePickerReviewService.isFirstValueSmaller(prev, cur) ? -1 : 1)
-    };
+        return (this.datePickerReviewService.isFirstValueSmaller(prev, cur) ? -1 : 1);
+    }
 
     public getDaysArray(month, year): ICalendarDay[] {
-        let mon = month;
-        let d = new Date(year, mon);
-        let resultArray = [];
+        const mon = month;
+        const d = new Date(year, mon);
+        const resultArray = [];
 
         for (let i = 0; i < this.getDay(d); i++) {
             resultArray.push(null);

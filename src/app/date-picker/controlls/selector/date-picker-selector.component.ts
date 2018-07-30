@@ -34,7 +34,7 @@ export class DatePickerSelectorComponent implements OnInit {
 
     public isOpen = false;
 
-    constructor(private datePickerStore: DatePickerStore) {}
+    constructor(public datePickerStore: DatePickerStore) {}
 
     public ngOnInit() {
 
