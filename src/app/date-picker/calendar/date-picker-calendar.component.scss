@@ -29,6 +29,8 @@
 .disabled-day {
     background: rgba(50, 50, 50, .05);
     border-radius: 0;
+    color: rgba(50, 50, 50, .3);
+    cursor: default;
 }
 
 .clicked-day {

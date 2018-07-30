@@ -1,5 +1,5 @@
 import { DatePickerService } from './services/date-picker.service';
-import { Component, forwardRef, OnInit } from '@angular/core';
+import { Component, forwardRef, OnInit, Input } from '@angular/core';
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DatePickerStore } from './services/date-picker.store';
@@ -7,11 +7,15 @@ import { DatePickerStore } from './services/date-picker.store';
 export interface IDateControl {
     min: Date;
     max: Date;
-    isActive?: boolean;
+}
+
+export interface IDateOptions {
+    minDate?: Date;
+    maxDate?: Date;
 }
 
 @Component({
-    selector: 'gredenham-date-picker',
+    selector: 'app-gredenham-date-picker',
     styleUrls: ['./date-picker.component.scss'],
     templateUrl: './date-picker.component.html',
     providers: [
@@ -27,19 +31,23 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
     public isOpen = false;
 
+    @Input() options: IDateOptions = {};
+
     constructor(
         public datePickerService: DatePickerService,
         public datePickerReviewService: DatePickerReviewService,
         private datePickerStore: DatePickerStore
     ) {}
 
-    public ngOnInit() {}
+    public ngOnInit() {
+        this.datePickerStore.changeOptions(this.options);
+    }
 
     public writeValue(control: IDateControl) {
         if (this.datePickerReviewService.checkControl(control)) {
 
             this.datePickerStore.changeSelectedDate(
-                    Object.values(control).map((item) => ({
+                Object.values(control).map((item) => ({
                     day: item.getDate(),
                     month: item.getMonth(),
                     year: item.getFullYear(),
@@ -63,16 +71,14 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
             this.isOpen = false;
             this.propagateChange({
                 min: selectedDate[0].full,
-                max: selectedDate[0].full,
-                isActive: true,
+                max: selectedDate[0].full
             });
         } else if (selectedDate.length === 2) {
             this.isOpen = false;
-            let [min, max] = selectedDate.sort(this.datePickerService.sortDates);
+            const [min, max] = selectedDate.sort(this.datePickerService.sortDates);
             this.propagateChange({
                 min: min.full,
-                max: max.full,
-                isActive: true
+                max: max.full
             });
         }
     }

@@ -1,10 +1,45 @@
-<br>
-Period
-<br>
-{{period.min}} {{period.max}}
-<br>
-<br>
+<div class="content" style="width: 900px">
+  <h1 class="title">Period</h1>
 
-<gredenham-date-picker
-  [(ngModel)]="period">
-</gredenham-date-picker>
+  <div class="row">
+    <div>Start date</div>
+    <br>
+    <div>{{period.min}}</div>
+  </div>
+
+  <br>
+  <br>
+
+  <div class="row">
+    <div>End date</div>
+    <br>
+    <div>{{period.max}}</div>
+  </div>
+
+  <br>
+  <br>
+
+  <app-gredenham-date-picker
+    [options]="datePickerOptions"
+    [(ngModel)]="period">
+  </app-gredenham-date-picker>
+
+  <br>
+  <br>
+
+  <code>
+      {{'<'}}app-gredenham-date-picker [options]="datePickerOptions" [(ngModel)]="period"{{'>'}}{{'<'}}/app-gredenham-date-picker{{'>'}}
+      <br><br>
+      export class AppComponent {{'{'}} <br><br>
+      &#160;&#160;public period: IDateControl = {{'{'}}<br>
+      &#160;&#160;&#160;&#160;min: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-10`),<br>
+      &#160;&#160;&#160;&#160;max: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-15`)<br>
+      &#160;&#160;{{'}'}};<br><br>
+
+      &#160;&#160;public datePickerOptions: IDateOptions = {{'{'}}<br>
+      &#160;&#160;&#160;&#160;minDate: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-5`),<br>
+      &#160;&#160;&#160;&#160;maxDate: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-20`)<br>
+      &#160;&#160;{{'}'}};<br><br>
+      {{'}'}}
+  </code>
+</div>

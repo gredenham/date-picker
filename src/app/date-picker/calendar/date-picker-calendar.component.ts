@@ -1,7 +1,7 @@
 import { DatePickerService, ICalendarDay } from '../services/date-picker.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePickerReviewService } from '../services/date-picker.review.service';
-import { DatePickerStore } from '../services/date-picker.store';
+import { DatePickerStore, IConfig } from '../services/date-picker.store';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 
 @Component({
@@ -14,7 +14,7 @@ import { combineLatest } from 'rxjs/observable/combineLatest';
                 'clicked-day': datePickerReviewService.isSelected(item, selectedDate),
                 'coincide-day': datePickerReviewService.isCoincide(item, selectedDate),
                 'today-day': datePickerReviewService.isToday(item, date),
-                'disabled-day': item === null
+                'disabled-day': item === null || !isInPeriod(item)
             }"
             (click)="selectDate(item)">
             {{ item ? item.day : '' }}
@@ -27,6 +27,7 @@ export class DatePickerCalendarComponent implements OnInit {
     public selectedYear: number;
     public selectedMonth: number;
     public selectedDate: ICalendarDay[] = [];
+    public options: IConfig = {};
 
     public date: Date;
 
@@ -34,26 +35,45 @@ export class DatePickerCalendarComponent implements OnInit {
         public ref: ChangeDetectorRef,
         public datePickerService: DatePickerService,
         public datePickerReviewService: DatePickerReviewService,
-        private datePickerStore: DatePickerStore,
+        public datePickerStore: DatePickerStore,
     ) {}
 
-    ngOnInit() {
-        
+    public ngOnInit() {
+
         combineLatest(
             this.datePickerStore.getSelectedMonth,
-            this.datePickerStore.getSelectedYear, 
+            this.datePickerStore.getSelectedYear,
             this.datePickerStore.getCurrentDate,
-            this.datePickerStore.getSelectedDate
-        ).subscribe(([month, year, cur, selectedDate]) => {
+            this.datePickerStore.getSelectedDate,
+            this.datePickerStore.getOptions
+        ).subscribe(([month, year, cur, selectedDate, options]) => {
             this.date = cur;
             this.selectedMonth = month;
             this.selectedYear = year;
             this.selectedDate = selectedDate;
+            this.options = <IConfig>options;
         });
 
     }
 
+    public isInPeriod(date): boolean {
+        const isSmallerOrEqualMaxDate = this.options.maxDate
+            ? (this.datePickerReviewService.isFirstValueSmaller(date, this.options.maxDate)
+                || this.datePickerReviewService.isValuesEquals(this.options.maxDate, date))
+            : true;
+
+        const isBiggerOrEqualMinDate = this.options.minDate
+            ? (this.datePickerReviewService.isFirstValueSmaller(this.options.minDate, date)
+                || this.datePickerReviewService.isValuesEquals(this.options.minDate, date))
+            : true;
+
+        return isSmallerOrEqualMaxDate && isBiggerOrEqualMinDate;
+    }
+
     public selectDate(date) {
+        if (!date || !this.isInPeriod(date)) {
+            return;
+        }
         let result = this.selectedDate;
 
         function defineDate() {
