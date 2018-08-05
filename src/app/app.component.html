@@ -1,4 +1,4 @@
-<div class="content" style="width: 900px">
+<div class="content" style="width: 500px">
   <h1 class="title">Period</h1>
 
   <div class="row">
@@ -27,19 +27,19 @@
   <br>
   <br>
 
-  <code>
-      {{'<'}}app-gredenham-date-picker [options]="datePickerOptions" [(ngModel)]="period"{{'>'}}{{'<'}}/app-gredenham-date-picker{{'>'}}
-      <br><br>
-      export class AppComponent {{'{'}} <br><br>
-      &#160;&#160;public period: IDateControl = {{'{'}}<br>
-      &#160;&#160;&#160;&#160;min: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-10`),<br>
-      &#160;&#160;&#160;&#160;max: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-15`)<br>
-      &#160;&#160;{{'}'}};<br><br>
+  <h1 class="title">Single date</h1>
 
-      &#160;&#160;public datePickerOptions: IDateOptions = {{'{'}}<br>
-      &#160;&#160;&#160;&#160;minDate: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-5`),<br>
-      &#160;&#160;&#160;&#160;maxDate: new Date(`${{'{'}}(new Date()).getFullYear(){{'}'}}-${{'{'}}(new Date()).getMonth() + 1{{'}'}}-20`)<br>
-      &#160;&#160;{{'}'}};<br><br>
-      {{'}'}}
-  </code>
+  <div class="row">
+    <div>Date</div>
+    <br>
+    <div>{{singleDate}}</div>
+  </div>
+
+  <br>
+  <br>
+
+  <app-gredenham-date-picker
+    [options]="datePickerSingleOptions"
+    [(ngModel)]="singleDate">
+  </app-gredenham-date-picker>
 </div>

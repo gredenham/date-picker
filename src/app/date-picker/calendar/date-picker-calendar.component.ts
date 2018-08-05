@@ -1,8 +1,9 @@
-import { DatePickerService, ICalendarDay } from '../services/date-picker.service';
+import { DatePickerService } from '../services/date-picker.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePickerReviewService } from '../services/date-picker.review.service';
-import { DatePickerStore, IConfig } from '../services/date-picker.store';
+import { DatePickerStore } from '../services/date-picker.store';
 import { combineLatest } from 'rxjs/observable/combineLatest';
+import { ICalendarDay, IConfig } from '../date-picker.sheme';
 
 @Component({
     selector: 'app-date-picker-calendar',
@@ -27,7 +28,7 @@ export class DatePickerCalendarComponent implements OnInit {
     public selectedYear: number;
     public selectedMonth: number;
     public selectedDate: ICalendarDay[] = [];
-    public options: IConfig = {};
+    public options: IConfig;
 
     public date: Date;
 
@@ -74,29 +75,41 @@ export class DatePickerCalendarComponent implements OnInit {
         if (!date || !this.isInPeriod(date)) {
             return;
         }
-        let result = this.selectedDate;
 
-        function defineDate() {
-            const index = result.findIndex((item) =>
-                ( this.datePickerReviewService.isValuesEquals(date, item) )
-            );
-            if (index >= 0) {
-                result.splice(index, 1);
-            } else {
-                if (result.length < 2) {
-                    (result.length === 1 && this.datePickerReviewService.isFirstValueSmaller(date, result[0]))
-                        ? result.unshift(date)
-                        : result.push(date);
-                } else if (result.length === 2) {
-                    result = [];
-                    defineDate.call(this);
+        let result;
+
+        if (this.options.isModeSingleDate) {
+
+            result = [date];
+            this.datePickerStore.changeSelectedDate(result);
+
+        } else {
+
+            const defineDate = () => {
+                const index = result.findIndex((item) =>
+                    ( this.datePickerReviewService.isValuesEquals(date, item) )
+                );
+                if (index >= 0) {
+                    result.splice(index, 1);
+                } else {
+                    if (result.length < 2) {
+                        (result.length === 1 && this.datePickerReviewService.isFirstValueSmaller(date, result[0]))
+                            ? result.unshift(date)
+                            : result.push(date);
+                    } else if (result.length === 2) {
+                        result = [];
+                        defineDate();
+                    }
                 }
-            }
+            };
+
+            result = this.selectedDate;
+            defineDate();
+            this.datePickerStore.changeSelectedDate(result);
         }
 
-        if (date) {
-            defineDate.call(this);
-            this.datePickerStore.changeSelectedDate(result);
+        if (this.options.autoClose && (this.options.isModeSingleDate || result.length === 2)) {
+            this.datePickerStore.confirmDate(result);
         }
     }
 }

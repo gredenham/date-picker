@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DatePickerReviewService } from './date-picker.review.service';
-
-export interface ICalendarDay {
-    day: number;
-    month: number;
-    year: number;
-    full: Date;
-}
+import { ICalendarDay } from '../date-picker.sheme';
 
 @Injectable()
 
