@@ -17,4 +17,4 @@ Control should be an interface `IDateControl` and configs should be an interface
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
-## Example https://dist-vicdejbdik.now.sh
+## Example https://dist-hwjusicjjz.now.sh
