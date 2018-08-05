@@ -1,5 +1,5 @@
-import { ICalendarDay } from './date-picker.service';
 import { Injectable } from '@angular/core';
+import { ICalendarDay } from '../date-picker.sheme';
 
 @Injectable()
 

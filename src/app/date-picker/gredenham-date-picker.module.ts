@@ -6,7 +6,6 @@ import { DatePickerSelectorComponent } from './controlls/selector/date-picker-se
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { DatePickerCalendarComponent } from './calendar/date-picker-calendar.component';
 import { DatePickerComponent } from './date-picker.component';
-import { DatePickerStore } from './services/date-picker.store';
 import { ObjecToArrayByKeysPipe } from './pipes/object-to-array-by-keys.pipe';
 import { DatePickerFooterComponent } from './controlls/footer/date-picker-footer.component';
 import { DatePickerDisplayComponent } from './controlls/display/date-picker-display.component';
@@ -23,8 +22,7 @@ const DatePickerComponents = [
 
 const DatePickerServices = [
     DatePickerService,
-    DatePickerReviewService,
-    DatePickerStore
+    DatePickerReviewService
 ];
 
 @NgModule({

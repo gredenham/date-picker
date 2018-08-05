@@ -3,22 +3,14 @@ import { Component, forwardRef, OnInit, Input } from '@angular/core';
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DatePickerStore } from './services/date-picker.store';
-
-export interface IDateControl {
-    min: Date;
-    max: Date;
-}
-
-export interface IDateOptions {
-    minDate?: Date;
-    maxDate?: Date;
-}
+import { IDateOptions, IDateControl, ICalendarDay } from './date-picker.sheme';
 
 @Component({
     selector: 'app-gredenham-date-picker',
     styleUrls: ['./date-picker.component.scss'],
     templateUrl: './date-picker.component.html',
     providers: [
+        DatePickerStore,
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => DatePickerComponent),
@@ -41,20 +33,20 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
     public ngOnInit() {
         this.datePickerStore.changeOptions(this.options);
+        this.datePickerStore.getConfirm.subscribe((date) => {
+            this.confirmChanges(date);
+        });
     }
 
-    public writeValue(control: IDateControl) {
-        if (this.datePickerReviewService.checkControl(control)) {
+    public writeValue(control: IDateControl | Date) {
+        if ((!this.options.selectMode || this.options.selectMode === 'period') && this.datePickerReviewService.checkControl(control)) {
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.parseControl(Object.values(control)));
+            return;
+        }
 
-            this.datePickerStore.changeSelectedDate(
-                Object.values(control).map((item) => ({
-                    day: item.getDate(),
-                    month: item.getMonth(),
-                    year: item.getFullYear(),
-                    full: item
-                }))
-            );
-
+        if (this.options.selectMode === 'single' && this.datePickerReviewService.checkValidDate(control)) {
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.parseControl([<Date>control]));
+            return;
         }
     }
 
@@ -67,6 +59,12 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     public registerOnTouched() {}
 
     public confirmChanges(selectedDate) {
+        if (this.options.selectMode === 'single') {
+            this.isOpen = false;
+            this.propagateChange(selectedDate[0].full);
+            return;
+        }
+
         if (selectedDate.length === 1) {
             this.isOpen = false;
             this.propagateChange({
@@ -81,6 +79,15 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
                 max: max.full
             });
         }
+    }
+
+    private parseControl(control: Date[]): ICalendarDay[] {
+        return control.map((item: Date) => <ICalendarDay>({
+            day: item.getDate(),
+            month: item.getMonth(),
+            year: item.getFullYear(),
+            full: item
+        }));
     }
 
 }

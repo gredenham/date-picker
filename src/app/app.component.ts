@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IDateControl, IDateOptions } from './date-picker/date-picker.component';
+import { IDateControl, IDateOptions, EnumSelectMode } from './date-picker/date-picker.sheme';
 
 @Component({
     selector: 'app-root',
@@ -15,6 +15,15 @@ export class AppComponent {
 
     public datePickerOptions: IDateOptions = {
         minDate: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-5`),
-        maxDate: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-20`)
+        maxDate: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-20`),
+        // selectMode: EnumSelectMode.period
+    };
+
+    public singleDate: Date = new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-12`);
+
+    public datePickerSingleOptions: IDateOptions = {
+        minDate: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-5`),
+        selectMode: EnumSelectMode.single,
+        autoClose: true
     };
 }
