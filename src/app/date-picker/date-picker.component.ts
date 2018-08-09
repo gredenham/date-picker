@@ -25,6 +25,8 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
     @Input() options: IDateOptions = {};
 
+    private currentValue: ICalendarDay[] = [];
+
     constructor(
         public datePickerService: DatePickerService,
         public datePickerReviewService: DatePickerReviewService,
@@ -40,12 +42,14 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
     public writeValue(control: IDateControl | Date) {
         if ((!this.options.selectMode || this.options.selectMode === 'period') && this.datePickerReviewService.checkControl(control)) {
-            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.parseControl(Object.values(control)));
+            this.currentValue = this.parseControl(Object.values(control));
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
             return;
         }
 
         if (this.options.selectMode === 'single' && this.datePickerReviewService.checkValidDate(control)) {
-            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.parseControl([<Date>control]));
+            this.currentValue = this.parseControl([<Date>control]);
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
             return;
         }
     }
@@ -67,6 +71,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
         if (selectedDate.length === 1) {
             this.isOpen = false;
+            this.currentValue = selectedDate;
             this.propagateChange({
                 min: selectedDate[0].full,
                 max: selectedDate[0].full
@@ -74,10 +79,18 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
         } else if (selectedDate.length === 2) {
             this.isOpen = false;
             const [min, max] = selectedDate.sort(this.datePickerService.sortDates);
+            this.currentValue = [min, max];
             this.propagateChange({
                 min: min.full,
                 max: max.full
             });
+        }
+    }
+
+    public toggleOpen() {
+        this.isOpen = !this.isOpen;
+        if (!this.isOpen) {
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
         }
     }
 

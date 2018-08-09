@@ -26,10 +26,18 @@
     cursor: pointer;
 }
 
-.disabled-day {
+.disabled-day, .empty-day {
     background: rgba(50, 50, 50, .05);
     border-radius: 0;
     color: rgba(50, 50, 50, .3);
+}
+
+.disabled-day {
+    cursor: not-allowed;
+}
+
+.empty-day {
+    pointer-events: none;
     cursor: default;
 }
 
@@ -48,6 +56,6 @@
     color: white;
 }
 
-.calendar-day:hover:not(.disabled-day) {
+.calendar-day:hover:not(.disabled-day):not(.empty-day) {
     background: rgba(241,98,34,.2);
 }

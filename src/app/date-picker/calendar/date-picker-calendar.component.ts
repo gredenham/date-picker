@@ -15,7 +15,8 @@ import { ICalendarDay, IConfig } from '../date-picker.sheme';
                 'clicked-day': datePickerReviewService.isSelected(item, selectedDate),
                 'coincide-day': datePickerReviewService.isCoincide(item, selectedDate),
                 'today-day': datePickerReviewService.isToday(item, date),
-                'disabled-day': item === null || !isInPeriod(item)
+                'disabled-day': !isInPeriod(item),
+                'empty-day': item === null
             }"
             (click)="selectDate(item)">
             {{ item ? item.day : '' }}
@@ -58,12 +59,12 @@ export class DatePickerCalendarComponent implements OnInit {
     }
 
     public isInPeriod(date): boolean {
-        const isSmallerOrEqualMaxDate = this.options.maxDate
+        const isSmallerOrEqualMaxDate = date && this.options.maxDate
             ? (this.datePickerReviewService.isFirstValueSmaller(date, this.options.maxDate)
                 || this.datePickerReviewService.isValuesEquals(this.options.maxDate, date))
             : true;
 
-        const isBiggerOrEqualMinDate = this.options.minDate
+        const isBiggerOrEqualMinDate = date && this.options.minDate
             ? (this.datePickerReviewService.isFirstValueSmaller(this.options.minDate, date)
                 || this.datePickerReviewService.isValuesEquals(this.options.minDate, date))
             : true;

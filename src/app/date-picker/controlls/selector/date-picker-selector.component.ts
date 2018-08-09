@@ -14,9 +14,9 @@ import { DatePickerStore } from '../../services/date-picker.store';
 
         <div class="month_list" *ngIf="isOpen">
             <div class="year_switch">
-                <div (click)="changeYear(-1)" class="year_switch-btn-left">&#706;</div>
+                <div (click)="changeYear(-1)" class="year_switch-btn-left btn-left"></div>
                 <div class="year_switch-value">{{selectedYear}}</div>
-                <div (click)="changeYear(1)" class="year_switch-btn-right">&#707;</div>
+                <div (click)="changeYear(1)" class="year_switch-btn-right btn-right"></div>
             </div>
             <div (click)="isOpen = false; datePickerStore.changeMonth(month);"
                 class="month_list-item" *ngFor="let month of datePickerStore.getMonthes | async | ObjecToArrayByKeysPipe">
