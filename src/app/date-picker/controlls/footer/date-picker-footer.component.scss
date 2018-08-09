@@ -4,6 +4,8 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    padding: 0 10px;
+    flex-wrap: nowrap;
 }
 
 .btn-cancel, .btn-ok {
@@ -16,6 +18,11 @@
     width: 50%;
     box-sizing: border-box;
     cursor: pointer;
+    transition: .3s;
+
+    &:not(.disabled-confirm):hover {
+        color: rgba(0, 0, 0, 1);
+    }
 }
 
 .disabled-confirm {
