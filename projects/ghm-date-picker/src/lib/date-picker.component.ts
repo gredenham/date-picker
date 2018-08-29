@@ -30,7 +30,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     constructor(
         public datePickerService: DatePickerService,
         public datePickerReviewService: DatePickerReviewService,
-        private datePickerStore: DatePickerStore
+        public datePickerStore: DatePickerStore
     ) {}
 
     public ngOnInit() {
@@ -42,7 +42,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
 
     public writeValue(control: IDateControl | Date) {
         if ((!this.options.selectMode || this.options.selectMode === 'period') && this.datePickerReviewService.checkControl(control)) {
-            this.currentValue = this.parseControl(Object.values(control));
+            this.currentValue = this.parseControl(Object.keys(control).map(key => control[key]));
             this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
             return;
         }

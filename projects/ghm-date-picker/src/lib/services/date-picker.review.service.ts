@@ -16,7 +16,7 @@ export class DatePickerReviewService {
     public checkControl(control) {
         const isControlValid = control && control.hasOwnProperty('min')
             && control.hasOwnProperty('max')
-            && Object.values(control).every(this.checkValidDate);
+            && Object.keys(control).every((key) => this.checkValidDate(control[key]));
         return isControlValid;
     }
 
