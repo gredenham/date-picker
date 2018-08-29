@@ -1,4 +1,4 @@
-import { GredenhamDatePickerModule } from './date-picker/gredenham-date-picker.module';
+import { GredenhamDatePickerModule } from '../../projects/ghm-date-picker/src/lib/gredenham-date-picker.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';

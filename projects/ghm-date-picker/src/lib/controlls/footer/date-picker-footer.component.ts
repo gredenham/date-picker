@@ -4,7 +4,7 @@ import { ICalendarDay, IConfig } from '../../date-picker.sheme';
 import { combineLatest } from 'rxjs';
 
 @Component({
-    selector: 'app-date-picker-footer',
+    selector: 'ghm-date-picker-footer',
     styleUrls: ['./date-picker-footer.component.scss'],
     template: `
         <div *ngIf="!options.autoClose" class="bottom-btns">

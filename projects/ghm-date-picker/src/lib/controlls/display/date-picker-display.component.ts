@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { DatePickerStore } from '../../services/date-picker.store';
 
 @Component({
-    selector: 'app-date-picker-display',
+    selector: 'ghm-date-picker-display',
     styleUrls: ['./date-picker-display.component.scss'],
     template: `
         <div (click)="open.next()" class="calendar__btn">

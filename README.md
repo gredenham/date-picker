@@ -9,7 +9,7 @@ Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app 
 
 Can be used as a form element or ngModel
 
-Add `GredenhamDatePickerModule` to providers of your module and use component `app-gredenham-date-picker`.
+Add `GredenhamDatePickerModule` to providers of your module and use component `ghm-date-picker`.
 
 Control should be an interface `IDateControl` and configs should be an interface `IDateOptions`.
 

@@ -117,6 +117,46 @@
           }
         }
       }
+    },
+    "ghm-date-picker": {
+      "root": "projects/ghm-date-picker",
+      "sourceRoot": "projects/ghm-date-picker/src",
+      "projectType": "library",
+      "prefix": "ghm",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ghm-date-picker/tsconfig.lib.json",
+            "project": "projects/ghm-date-picker/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ghm-date-picker/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ghm-date-picker/src/test.ts",
+            "tsConfig": "projects/ghm-date-picker/tsconfig.spec.json",
+            "karmaConfig": "projects/ghm-date-picker/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ghm-date-picker/tsconfig.lib.json",
+              "projects/ghm-date-picker/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "data-picker-app",

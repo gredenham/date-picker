@@ -3,7 +3,7 @@ import { combineLatest } from 'rxjs';
 import { DatePickerStore } from '../../services/date-picker.store';
 
 @Component({
-    selector: 'app-date-picker-selector',
+    selector: 'ghm-date-picker-selector',
     styleUrls: ['./date-picker-selector.component.scss'],
     template: `
         <div class="btn-left" (click)="changeMonth(-1)"></div>
