@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePickerStore } from '../../services/date-picker.store';
 import { ICalendarDay, IConfig } from '../../date-picker.sheme';
-import { combineLatest } from 'rxjs/observable/combineLatest';
+import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-date-picker-footer',
