@@ -10,7 +10,7 @@ export class DatePickerPipe implements PipeTransform {
 
     private monthes = {};
 
-    constructor(private datePickerStore: DatePickerStore) {
+    constructor(public datePickerStore: DatePickerStore) {
         this.datePickerStore.getMonthes.subscribe((monthes) => this.monthes = monthes);
     }
 
