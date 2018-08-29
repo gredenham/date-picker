@@ -16,6 +16,14 @@
       "dom"
     ],
     "module": "es2015",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "ghm-date-picker": [
+        "dist/ghm-date-picker"
+      ],
+      "ghm-date-picker/*": [
+        "dist/ghm-date-picker/*"
+      ]
+    }
   }
 }

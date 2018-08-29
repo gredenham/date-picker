@@ -1,0 +1,15 @@
+<ghm-date-picker-display (open)="toggleOpen()"></ghm-date-picker-display>
+
+<div *ngIf="isOpen" class="container">
+
+  <ghm-date-picker-selector></ghm-date-picker-selector>
+
+  <div class="week">
+    <div class="day week-day" *ngFor="let day of datePickerStore.getDays | async">{{day}}</div>
+  </div>
+
+  <ghm-date-picker-calendar></ghm-date-picker-calendar>
+
+  <ghm-date-picker-footer></ghm-date-picker-footer>
+
+</div>

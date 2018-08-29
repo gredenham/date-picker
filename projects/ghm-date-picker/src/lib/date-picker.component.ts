@@ -6,7 +6,7 @@ import { DatePickerStore } from './services/date-picker.store';
 import { IDateOptions, IDateControl, ICalendarDay } from './date-picker.sheme';
 
 @Component({
-    selector: 'app-gredenham-date-picker',
+    selector: 'ghm-date-picker',
     styleUrls: ['./date-picker.component.scss'],
     templateUrl: './date-picker.component.html',
     providers: [

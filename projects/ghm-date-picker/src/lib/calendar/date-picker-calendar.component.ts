@@ -6,7 +6,7 @@ import { combineLatest } from 'rxjs';
 import { ICalendarDay, IConfig } from '../date-picker.sheme';
 
 @Component({
-    selector: 'app-date-picker-calendar',
+    selector: 'ghm-date-picker-calendar',
     styleUrls: ['./date-picker-calendar.component.scss'],
     template: `
         <div *ngFor="let item of datePickerService.getDaysArray(selectedMonth, selectedYear)"

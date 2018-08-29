@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IDateControl, IDateOptions, EnumSelectMode } from './date-picker/date-picker.sheme';
+import { IDateControl, IDateOptions, EnumSelectMode } from '../../projects/ghm-date-picker/src/lib/date-picker.sheme';
 
 @Component({
     selector: 'app-root',
