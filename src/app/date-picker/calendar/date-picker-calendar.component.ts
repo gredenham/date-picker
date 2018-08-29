@@ -2,7 +2,7 @@ import { DatePickerService } from '../services/date-picker.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePickerReviewService } from '../services/date-picker.review.service';
 import { DatePickerStore } from '../services/date-picker.store';
-import { combineLatest } from 'rxjs/observable/combineLatest';
+import { combineLatest } from 'rxjs';
 import { ICalendarDay, IConfig } from '../date-picker.sheme';
 
 @Component({

@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { DatePickerService } from './date-picker.service';
 import { DatePickerReviewService } from './date-picker.review.service';
 import { EnumSelectMode, IDateOptions, ICalendarDay, IConfig } from '../date-picker.sheme';
-import { Subject } from '../../../../node_modules/rxjs/Subject';
 
 @Injectable()
 
