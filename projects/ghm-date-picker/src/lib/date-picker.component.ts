@@ -1,5 +1,5 @@
 import { DatePickerService } from './services/date-picker.service';
-import { Component, forwardRef, OnInit, Input } from '@angular/core';
+import { Component, forwardRef, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DatePickerStore } from './services/date-picker.store';
@@ -16,7 +16,8 @@ import { IDateOptions, IDateControl, ICalendarDay } from './date-picker.sheme';
             useExisting: forwardRef(() => DatePickerComponent),
             multi: true
         }
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class DatePickerComponent implements OnInit, ControlValueAccessor {
