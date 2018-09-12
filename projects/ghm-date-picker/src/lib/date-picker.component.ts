@@ -25,6 +25,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     public isOpen = false;
 
     @Input() options: IDateOptions = {};
+    @Input() disable: boolean;
 
     private currentValue: ICalendarDay[] = [];
 
@@ -89,6 +90,9 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
 
     public toggleOpen() {
+        if (this.disable) {
+            return;
+        }
         this.isOpen = !this.isOpen;
         if (!this.isOpen) {
             this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
