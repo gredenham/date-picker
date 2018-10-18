@@ -43,6 +43,16 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
 
     public writeValue(control: IDateControl | Date) {
+        if (
+            (!this.options.selectMode || this.options.selectMode === 'period') &&
+            control &&
+            control['min'] == null &&
+            control['max'] == null
+        ) {
+            this.currentValue = this.parseControl(Object.keys(control).map(key => control[key]));
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
+            return;
+        }
         if ((!this.options.selectMode || this.options.selectMode === 'period') && this.datePickerReviewService.checkControl(control)) {
             this.currentValue = this.parseControl(Object.keys(control).map(key => control[key]));
             this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
@@ -100,12 +110,22 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
 
     private parseControl(control: Date[]): ICalendarDay[] {
-        return control.map((item: Date) => <ICalendarDay>({
-            day: item.getDate(),
-            month: item.getMonth(),
-            year: item.getFullYear(),
-            full: item
-        }));
+        return control.map((item: Date) => {
+            if (item == null) {
+              return <ICalendarDay>({
+                day: null,
+                month: null,
+                year: null,
+                full: null
+              });
+            }
+            return <ICalendarDay>({
+              day: item.getDate(),
+              month: item.getMonth(),
+              year: item.getFullYear(),
+              full: item
+            });
+        });
     }
 
 }
