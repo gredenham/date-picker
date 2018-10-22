@@ -1,5 +1,5 @@
 import { DatePickerService } from './services/date-picker.service';
-import { Component, forwardRef, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, forwardRef, OnInit, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DatePickerStore } from './services/date-picker.store';
@@ -20,7 +20,7 @@ import { IDateOptions, IDateControl, ICalendarDay } from './date-picker.sheme';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class DatePickerComponent implements OnInit, ControlValueAccessor {
+export class DatePickerComponent implements OnInit, ControlValueAccessor, OnChanges {
 
     public isOpen = false;
 
@@ -32,7 +32,7 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     constructor(
         public datePickerService: DatePickerService,
         public datePickerReviewService: DatePickerReviewService,
-        public datePickerStore: DatePickerStore
+        public datePickerStore: DatePickerStore,
     ) {}
 
     public ngOnInit() {
@@ -40,6 +40,10 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
         this.datePickerStore.getConfirm.subscribe((date) => {
             this.confirmChanges(date);
         });
+    }
+
+    public ngOnChanges() {
+        this.datePickerStore.changeOptions(this.options);
     }
 
     public writeValue(control: IDateControl | Date) {
