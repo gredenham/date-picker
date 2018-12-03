@@ -26,7 +26,7 @@ export class DatePickerStore {
         'September',
         'October',
         'Novembver',
-        'Desember'
+        'December'
     ]);
 
     private days: BehaviorSubject<string[]> = new BehaviorSubject([
