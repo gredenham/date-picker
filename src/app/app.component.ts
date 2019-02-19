@@ -24,6 +24,7 @@ export class AppComponent {
     public datePickerSingleOptions: IDateOptions = {
         minDate: new Date(`${(new Date()).getFullYear()}-${(new Date()).getMonth() + 1}-5`),
         selectMode: EnumSelectMode.single,
-        autoClose: true
+        autoClose: true,
+        showWeeksNums: true,
     };
 }

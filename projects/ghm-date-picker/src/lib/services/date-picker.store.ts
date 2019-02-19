@@ -59,7 +59,8 @@ export class DatePickerStore {
     public changeOptions(options: IDateOptions) {
         const config: IConfig = {
             autoClose: !!options.autoClose,
-            isModeSingleDate: (options.selectMode && options.selectMode === EnumSelectMode.single)
+            isModeSingleDate: (options.selectMode && options.selectMode === EnumSelectMode.single),
+            showWeeksNums: !!options.showWeeksNums
         };
 
         ['minDate', 'maxDate'].forEach((key) => {
