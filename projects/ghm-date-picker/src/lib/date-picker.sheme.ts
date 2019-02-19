@@ -13,6 +13,7 @@ export interface IDateOptions {
     maxDate?: Date;
     selectMode?: EnumSelectMode;
     autoClose?: boolean;
+    showWeeksNums?: boolean;
 }
 
 export interface IConfig {
@@ -20,6 +21,7 @@ export interface IConfig {
     maxDate?: ICalendarDay;
     isModeSingleDate: boolean;
     autoClose: boolean;
+    showWeeksNums?: boolean;
 }
 
 export interface ICalendarDay {

@@ -14,6 +14,15 @@ export class DatePickerService {
         return (this.datePickerReviewService.isFirstValueSmaller(prev, cur) ? -1 : 1);
     }
 
+    public getWeeksArray(month, year) {
+        const daysArray = this.getDaysArray(month, year);
+        const daysArraySplitedByWeeks = this.splitTo(daysArray, 7);
+        return daysArraySplitedByWeeks.map((daysByWeek) => {
+            const notEmptyDay = daysByWeek.find((day: ICalendarDay) => day != null);
+            return this.getWeekNum(notEmptyDay.full);
+        });
+    }
+
     public getDaysArray(month, year): ICalendarDay[] {
         const mon = month;
         const d = new Date(year, mon);
@@ -50,4 +59,25 @@ export class DatePickerService {
         return day - 1;
     }
 
+    private getWeekNum(date): number {
+        if (!date) {
+            return;
+        }
+        date = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+        const yearStart: any = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+        return Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+    }
+
+    private splitTo(arr: any[], n: number) {
+        return arr.reduce((p, c) => {
+            if (p.length === 0 || p[p.length - 1].length === n) {
+                p.push([]);
+            }
+
+            p[p.length - 1].push(c);
+
+            return p;
+        }, []);
+    }
 }

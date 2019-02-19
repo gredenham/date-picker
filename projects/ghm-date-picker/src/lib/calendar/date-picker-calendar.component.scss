@@ -1,3 +1,7 @@
+$height: 32px;
+$font: 14px 'Roboto-Regular', sans-serif;
+$color: #323232;
+
 :host {
     width: 100%;
     display: flex;
@@ -6,18 +10,36 @@
     user-select: none;
     box-sizing: border-box;
     padding: 0 10px;
+    position: relative;
+}
+
+.week-nums {
+    position: absolute;
+    top: 0;
+    right: calc(100% - 10px);
+    width: 30px;
+
+    &__item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: $height;
+        font: $font;
+        color: $color;
+        width: 100%;
+    }
 }
 
 .day {
     width: calc(100% / 7);
-    height: 32px;
+    height: $height;
     display: inline-block;
     vertical-align: bottom;
     display: flex;
     justify-content: center;
     align-items: center;
-    font: 14px 'Roboto-Regular', sans-serif;
-    color: #323232;
+    font: $font;
+    color: $color;
     box-sizing: border-box;
     border-radius: 2px;
 }

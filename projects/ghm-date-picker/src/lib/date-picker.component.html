@@ -3,12 +3,13 @@
 <div *ngIf="isOpen" class="container">
 
   <ghm-date-picker-selector></ghm-date-picker-selector>
+  <div [ngClass]="{'with-weeks': options.showWeeksNums}">
+    <div class="week">
+      <div class="day week-day" *ngFor="let day of datePickerStore.getDays | async">{{day}}</div>
+    </div>
 
-  <div class="week">
-    <div class="day week-day" *ngFor="let day of datePickerStore.getDays | async">{{day}}</div>
+    <ghm-date-picker-calendar></ghm-date-picker-calendar>
   </div>
-
-  <ghm-date-picker-calendar></ghm-date-picker-calendar>
 
   <ghm-date-picker-footer></ghm-date-picker-footer>
 

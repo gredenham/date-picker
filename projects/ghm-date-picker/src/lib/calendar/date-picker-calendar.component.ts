@@ -9,6 +9,10 @@ import { ICalendarDay, IConfig } from '../date-picker.sheme';
     selector: 'ghm-date-picker-calendar',
     styleUrls: ['./date-picker-calendar.component.scss'],
     template: `
+        <div *ngIf="options.showWeeksNums" class="week-nums">
+            <div *ngFor="let item of datePickerService.getWeeksArray(selectedMonth, selectedYear)"
+                class="week-nums__item">{{item}}</div>
+        </div>
         <div *ngFor="let item of datePickerService.getDaysArray(selectedMonth, selectedYear)"
             class="day calendar-day"
             [ngClass]="{
