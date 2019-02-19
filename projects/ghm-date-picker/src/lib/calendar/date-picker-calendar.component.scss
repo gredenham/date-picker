@@ -1,6 +1,6 @@
 $height: 32px;
 $font: 14px 'Roboto-Regular', sans-serif;
-$color: #323232;
+$color: #f16222;
 
 :host {
     width: 100%;
@@ -39,7 +39,7 @@ $color: #323232;
     justify-content: center;
     align-items: center;
     font: $font;
-    color: $color;
+    color: #323232;
     box-sizing: border-box;
     border-radius: 2px;
 }
@@ -64,7 +64,7 @@ $color: #323232;
 }
 
 .clicked-day {
-    background: #F16222 !important;
+    background: $color !important;
     color: white;
 }
 
