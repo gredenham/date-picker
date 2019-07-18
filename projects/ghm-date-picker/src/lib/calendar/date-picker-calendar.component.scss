@@ -31,9 +31,8 @@ $color: #f16222;
 }
 
 .day {
-    width: calc(100% / 7);
+    width: 14.285714%; // calc(100% / 7);
     height: $height;
-    display: inline-block;
     vertical-align: bottom;
     display: flex;
     justify-content: center;
