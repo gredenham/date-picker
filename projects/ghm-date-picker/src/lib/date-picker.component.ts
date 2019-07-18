@@ -1,9 +1,25 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  OnChanges,
+  OnInit,
+  Input,
+  ViewChild,
+} from '@angular/core';
 import { DatePickerService } from './services/date-picker.service';
-import { Component, forwardRef, OnInit, Input, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 import { DatePickerReviewService } from './services/date-picker.review.service';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { DatePickerStore } from './services/date-picker.store';
 import { IDateOptions, IDateControl, ICalendarDay } from './date-picker.sheme';
+
+interface CustomMouseEvent extends MouseEvent {
+    data?: {
+        toggle: boolean;
+    };
+}
 
 @Component({
     selector: 'ghm-date-picker',
@@ -26,6 +42,8 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor, OnChan
 
     @Input() options: IDateOptions = {};
     @Input() disable: boolean;
+
+    @ViewChild('selectContainer') selectContainer: ElementRef;
 
     private currentValue: ICalendarDay[] = [];
 
@@ -103,13 +121,34 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor, OnChan
         }
     }
 
-    public toggleOpen() {
+    public toggleOpen(event: MouseEvent) {
+        event.preventDefault();
         if (this.disable) {
             return;
         }
         this.isOpen = !this.isOpen;
         if (!this.isOpen) {
             this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
+        }
+        this.setToggleEventData(event);
+    }
+
+    @HostListener('document:click', ['$event']) clickOut(e: CustomMouseEvent): void {
+        const isToggleEvent = e.data != null && e.data.toggle;
+        if (this.isOpen && !isToggleEvent &&
+            !this.selectContainer.nativeElement.contains(e.target)) {
+            this.isOpen = false;
+            this.datePickerStore.changeSelectedDate(<ICalendarDay[]>this.currentValue);
+        }
+    }
+
+    private setToggleEventData(event) {
+        if (!event.data) {
+            event.data = {
+                toggle: true
+            };
+        } else {
+            event.data.toggle = true;
         }
     }
 
