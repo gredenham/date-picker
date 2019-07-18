@@ -1,6 +1,6 @@
 <ghm-date-picker-display (open)="toggleOpen($event)"></ghm-date-picker-display>
 
-<div *ngIf="isOpen" class="container" #selectContainer>
+<div *ngIf="isOpen" class="container">
 
   <ghm-date-picker-selector></ghm-date-picker-selector>
   <div [ngClass]="{'with-weeks': options.showWeeksNums}">
