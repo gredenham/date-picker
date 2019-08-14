@@ -1,8 +1,9 @@
+import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
+import { combineLatest, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DatePickerService } from '../services/date-picker.service';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { DatePickerReviewService } from '../services/date-picker.review.service';
 import { DatePickerStore } from '../services/date-picker.store';
-import { combineLatest } from 'rxjs';
 import { ICalendarDay, IConfig } from '../date-picker.sheme';
 
 @Component({
@@ -28,7 +29,7 @@ import { ICalendarDay, IConfig } from '../date-picker.sheme';
     `
 })
 
-export class DatePickerCalendarComponent implements OnInit {
+export class DatePickerCalendarComponent implements OnInit, OnDestroy {
 
     public selectedYear: number;
     public selectedMonth: number;
@@ -36,6 +37,8 @@ export class DatePickerCalendarComponent implements OnInit {
     public options: IConfig;
 
     public date: Date;
+
+    private ngUnsubscribe: Subject<void> = new Subject<void> ();
 
     constructor(
         public ref: ChangeDetectorRef,
@@ -52,6 +55,8 @@ export class DatePickerCalendarComponent implements OnInit {
             this.datePickerStore.getCurrentDate,
             this.datePickerStore.getSelectedDate,
             this.datePickerStore.getOptions
+        ).pipe(
+            takeUntil(this.ngUnsubscribe)
         ).subscribe(([month, year, cur, selectedDate, options]) => {
             this.date = cur;
             this.selectedMonth = month;
@@ -60,6 +65,10 @@ export class DatePickerCalendarComponent implements OnInit {
             this.options = <IConfig>options;
         });
 
+    }
+
+    public ngOnDestroy() {
+        this.unsubscribe();
     }
 
     public isInPeriod(date): boolean {
@@ -116,5 +125,10 @@ export class DatePickerCalendarComponent implements OnInit {
         if (this.options.autoClose && (this.options.isModeSingleDate || result.length === 2)) {
             this.datePickerStore.confirmDate(result);
         }
+    }
+
+    private unsubscribe(): void {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
     }
 }
