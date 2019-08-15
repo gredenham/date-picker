@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { combineLatest, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DatePickerStore } from '../../services/date-picker.store';
 
 @Component({
@@ -26,13 +27,15 @@ import { DatePickerStore } from '../../services/date-picker.store';
     `
 })
 
-export class DatePickerSelectorComponent implements OnInit {
+export class DatePickerSelectorComponent implements OnInit, OnDestroy {
 
     public selectedYear: number;
 
     public selectedMonth: number;
 
     public isOpen = false;
+
+    private ngUnsubscribe: Subject<void> = new Subject<void> ();
 
     constructor(public datePickerStore: DatePickerStore) {}
 
@@ -41,10 +44,16 @@ export class DatePickerSelectorComponent implements OnInit {
         combineLatest(
             this.datePickerStore.getSelectedMonth,
             this.datePickerStore.getSelectedYear
+        ).pipe(
+            takeUntil(this.ngUnsubscribe)
         ).subscribe(([month, year]) => {
             this.selectedMonth = month;
             this.selectedYear = year;
         });
+    }
+
+    public ngOnDestroy() {
+        this.unsubscribe();
     }
 
     public changeYear(val: number) {
@@ -58,5 +67,10 @@ export class DatePickerSelectorComponent implements OnInit {
         } else {
             this.datePickerStore.changeMonth(this.selectedMonth + val);
         }
+    }
+
+    private unsubscribe(): void {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
     }
 }

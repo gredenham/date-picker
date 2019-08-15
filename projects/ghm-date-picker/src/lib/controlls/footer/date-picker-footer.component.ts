@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { combineLatest, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DatePickerStore } from '../../services/date-picker.store';
 import { ICalendarDay, IConfig } from '../../date-picker.sheme';
-import { combineLatest } from 'rxjs';
 
 @Component({
     selector: 'ghm-date-picker-footer',
@@ -22,11 +23,13 @@ import { combineLatest } from 'rxjs';
     `
 })
 
-export class DatePickerFooterComponent implements OnInit {
+export class DatePickerFooterComponent implements OnInit, OnDestroy {
 
     public selectedDate: ICalendarDay[];
 
     public options: IConfig;
+
+    private ngUnsubscribe: Subject<void> = new Subject<void> ();
 
     constructor(
         public datePickerStore: DatePickerStore
@@ -38,10 +41,20 @@ export class DatePickerFooterComponent implements OnInit {
         combineLatest(
             this.datePickerStore.getSelectedDate,
             this.datePickerStore.getOptions
+        ).pipe(
+            takeUntil(this.ngUnsubscribe)
         ).subscribe(([date, options]) => {
             this.selectedDate = date;
             this.options = options;
         });
     }
 
+    public ngOnDestroy() {
+        this.unsubscribe();
+    }
+
+    private unsubscribe(): void {
+        this.ngUnsubscribe.next();
+        this.ngUnsubscribe.complete();
+    }
 }
